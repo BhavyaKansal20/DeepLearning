@@ -1,1 +1,35 @@
+# Sync script - local only
 sync.command
+
+# Jupyter temp/session files
+.ipynb_checkpoints/
+.virtual_documents/
+*.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# System files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Model files (optional - add if needed)
+# *.h5
+# *.pkl
+# *.pth
