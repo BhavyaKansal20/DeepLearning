@@ -1,339 +1,326 @@
-# 🔁 **Backpropagation in Neural Networks**
+# 🧠 Backpropagation in Neural Networks
 
-
-Backpropagation (Backward Propagation of Errors) is a core algorithm used to train neural networks by minimizing the difference between **predicted output** and **actual output**.
-
-It works by:
-- Propagating errors **backward**
-- Using the **chain rule of calculus**
-- Updating **weights & biases iteratively**
-
-Combined with optimization techniques like **gradient descent**, it enables models to **learn complex patterns efficiently**.
+> **Last Updated:** 9 Feb, 2026 &nbsp;|&nbsp; 📚 Deep Learning Series &nbsp;|&nbsp; ⚡ Core Algorithm
 
 ---
 
-## 🧠 Backpropagation Overview
+## 🔍 What is Backpropagation?
 
-![Backpropagation](https://media.geeksforgeeks.org/wp-content/uploads/20250701163824448467/Backpropagation-in-Neural-Network-1.webp)
+**Backpropagation** *(short for Backward Propagation of Errors)* is the **core training algorithm** of neural networks. It minimizes the difference between predicted and actual outputs by:
 
----
+1. Propagating errors **backward** through the network
+2. Using the **chain rule of calculus** to compute gradients
+3. **Iteratively updating** weights and biases
 
-## ⚡ Why Backpropagation Matters
-
-- ✅ Efficient Weight Updates  
-- 🚀 Scalable to deep networks  
-- 🤖 Fully automated learning  
-
-> 🔥 Without backpropagation → neural networks don’t learn.
+> Combined with optimization techniques like **Gradient Descent**, backpropagation enables the model to reduce loss across epochs and effectively learn complex patterns from data.
 
 ---
 
-# ⚙️ Working of Backpropagation Algorithm
+![Backpropagation Overview](https://media.geeksforgeeks.org/wp-content/uploads/20250701163824448467/Backpropagation-in-Neural-Network-1.webp)
 
-## 🔹 1. Forward Pass
-
-- Input flows layer by layer  
-- Weighted sum + activation applied  
+*Figure 1 — Overview of the Backpropagation process in a neural network*
 
 ---
 
-![Forward inside Backprop](https://media.geeksforgeeks.org/wp-content/uploads/20250701163954688803/Backpropagation-in-Neural-Network-2.webp)
+## ⭐ Why Backpropagation Matters
+
+| Feature | Description |
+|---|---|
+| ⚡ **Efficient Weight Update** | Computes gradients of the loss function w.r.t. each weight using the chain rule — enabling efficient updates |
+| 📈 **Scalability** | Scales well to networks with multiple layers and complex architectures, making **deep learning feasible** |
+| 🤖 **Automated Learning** | The model adjusts itself automatically to optimize performance — no manual tuning needed |
 
 ---
 
-## 🔹 2. Backward Pass
+## ⚙️ Working of the Backpropagation Algorithm
 
-- Error computed  
-- Gradients calculated  
-- Weights updated  
+The algorithm operates in **two main passes:**
 
----
-
-## 📉 Error Function (MSE)
-
-\[
-\boxed{
-MSE = (Predicted - Actual)^2
-}
-\]
+```
+INPUT DATA ──► FORWARD PASS ──► PREDICTION ──► ERROR CALC ──► BACKWARD PASS ──► WEIGHT UPDATE
+     ▲                                                                                  │
+     └──────────────────────── REPEAT UNTIL CONVERGENCE ◄──────────────────────────────┘
+```
 
 ---
 
-# 🧪 Example Setup
+## 📤 Step 1 — Forward Pass
 
-- Activation = **Sigmoid**
-- Target Output = **0.5**
-- Learning Rate = **1**
+In the **forward pass**, input data flows through the network layer by layer:
 
----
-
-![Example Network](https://media.geeksforgeeks.org/wp-content/uploads/20250701164029130520/Backpropagation-in-Neural-Network-3.webp)
-
----
-
-# 🔹 Forward Propagation
-
-## 1️⃣ Initial Calculation (Weighted Sum)
-
-\[
-\boxed{
-a_j = \sum (w_{i,j} \cdot x_i)
-}
-\]
-
-**Where:**
-- \( a_j \) → weighted sum  
-- \( w_{i,j} \) → weights  
-- \( x_i \) → inputs  
+- Input data is fed into the **input layer**
+- Inputs combined with **weights** are passed to hidden layers
+- In a network with two hidden layers `h1` and `h2` → output of `h1` becomes input of `h2`
+- A **bias** is added to the weighted inputs before applying any activation function
+- Each hidden layer computes the **weighted sum** `a`, then applies an **activation function** (e.g., ReLU) to get output `o`
+- Final layer uses **softmax** to convert weighted outputs into probabilities for classification
 
 ---
 
-## 2️⃣ Output After Activation
+![Forward Pass Diagram](https://media.geeksforgeeks.org/wp-content/uploads/20250701163954688803/Backpropagation-in-Neural-Network-2.webp)
 
-\[
-\boxed{
-o_j = activation(a_j)
-}
-\]
+*Figure 2 — Forward pass: data flows from input → hidden layers → output*
 
 ---
 
-## 3️⃣ Sigmoid Function
+## 📥 Step 2 — Backward Pass
 
-\[
-\boxed{
-y_j = \frac{1}{1 + e^{-a_j}}
-}
-\]
+In the **backward pass**, the error is propagated back through the network to update weights and biases.
 
----
+### 🔢 Error Calculation — Mean Squared Error (MSE)
 
-![Intermediate Outputs](https://media.geeksforgeeks.org/wp-content/uploads/20250701164114106895/Backpropagation-in-Neural-Network-4.webp)
+$$\text{MSE} = (\text{Predicted Output} - \text{Actual Output})^2$$
 
----
-
-## 4️⃣ Computation
-
-### Hidden Layer h1
-
-\[
-\boxed{
-a_1 = (0.2 \cdot 0.35) + (0.2 \cdot 0.7) = 0.21
-}
-\]
-
-\[
-\boxed{
-y_3 = \frac{1}{1 + e^{-0.21}} = 0.56
-}
-\]
+Once the error is calculated:
+- **Gradients** are computed using the **chain rule**
+- Gradients indicate *how much* each weight and bias should be adjusted
+- The pass continues **layer by layer** — ensuring the network improves progressively
+- The **derivative of the activation function** plays a crucial role in this computation
 
 ---
 
-### Hidden Layer h2
+## 🧮 Full Worked Example — Step by Step
 
-\[
-\boxed{
-a_2 = (0.3 \cdot 0.35) + (0.3 \cdot 0.7) = 0.315
-}
-\]
-
-\[
-\boxed{
-y_4 = \frac{1}{1 + e^{-0.315}}
-}
-\]
+> **Setup:**
+> - Activation Function: **Sigmoid**
+> - Target Output: **0.5**
+> - Learning Rate (η): **1**
 
 ---
 
-### Output Layer
+![Network Diagram with Weights](https://media.geeksforgeeks.org/wp-content/uploads/20250701164029130520/Backpropagation-in-Neural-Network-3.webp)
 
-\[
-\boxed{
-a_3 = (0.3 \cdot 0.57) + (0.9 \cdot 0.59) = 0.702
-}
-\]
-
-\[
-\boxed{
-y_5 = \frac{1}{1 + e^{-0.702}} = 0.67
-}
-\]
+*Figure 3 — Neural network with initial weights for the backpropagation example*
 
 ---
 
-![Final Outputs](https://media.geeksforgeeks.org/wp-content/uploads/20250701164956768059/Backpropagation-in-Neural-Network-5.webp)
+## ➡️ Forward Propagation
+
+### 1️⃣ Weighted Sum at Each Node
+
+$$a_j = \sum (w_{i,j} \times x_i)$$
+
+| Symbol | Meaning |
+|---|---|
+| $a_j$ | Weighted sum of all inputs and weights at node $j$ |
+| $w_{i,j}$ | Weight between the $i^{th}$ input and $j^{th}$ neuron |
+| $x_i$ | Value of the $i^{th}$ input |
+
+**Output after activation:**
+
+$$o_j = \text{activation\_function}(a_j)$$
 
 ---
 
-## ❌ Error Calculation
+### 2️⃣ Sigmoid Activation Function
 
-\[
-\boxed{
-Error = y_{target} - y_5 = 0.5 - 0.67 = -0.17
-}
-\]
+Returns a value between **0 and 1**, introducing **non-linearity** into the model:
+
+$$y_j = \frac{1}{1 + e^{-a_j}}$$
 
 ---
 
-# 🔁 Backward Propagation
+![Sigmoid Function Diagram](https://media.geeksforgeeks.org/wp-content/uploads/20250701164114106895/Backpropagation-in-Neural-Network-4.webp)
 
-## 1️⃣ Gradient Update Rule
-
-\[
-\boxed{
-\Delta w_{ij} = \eta \cdot \delta_j \cdot O_j
-}
-\]
+*Figure 4 — Sigmoid function applied to compute outputs y₃, y₄ and y₅*
 
 ---
 
-## 2️⃣ Output Layer Error
+### 3️⃣ Computing Node Outputs
 
-\[
-\boxed{
-\delta_5 = y_5(1 - y_5)(y_{target} - y_5)
-}
-\]
+#### 🔵 At Hidden Node `h1` → computing `y₃`
 
-\[
-\boxed{
-= 0.67(1 - 0.67)(-0.17) = -0.0376
-}
-\]
+$$a_1 = (w_{1,1} \cdot x_1) + (w_{2,1} \cdot x_2) = (0.2 \times 0.35) + (0.2 \times 0.7) = 0.21$$
+
+$$y_3 = F(a_1) = \frac{1}{1 + e^{-0.21}} = \boxed{0.56}$$
 
 ---
 
-## 3️⃣ Hidden Layer Errors
+#### 🔵 At Hidden Node `h2` → computing `y₄`
 
-### h1
+$$a_2 = (w_{1,2} \cdot x_1) + (w_{2,2} \cdot x_2) = (0.3 \times 0.35) + (0.3 \times 0.7) = 0.315$$
 
-\[
-\boxed{
-\delta_3 = y_3(1 - y_3)(w_{1,3} \cdot \delta_5)
-}
-\]
-
-\[
-\boxed{
-= 0.56(1 - 0.56)(0.3 \cdot -0.0376) = -0.0027
-}
-\]
+$$y_4 = F(0.315) = \frac{1}{1 + e^{-0.315}} = \boxed{0.57}$$
 
 ---
 
-### h2
+#### 🔵 At Output Node `O3` → computing `y₅`
 
-\[
-\boxed{
-\delta_4 = y_4(1 - y_4)(w_{2,3} \cdot \delta_5)
-}
-\]
+$$a_3 = (w_{1,3} \cdot y_3) + (w_{2,3} \cdot y_4) = (0.3 \times 0.57) + (0.9 \times 0.59) = 0.702$$
 
-\[
-\boxed{
-= 0.59(1 - 0.59)(0.9 \cdot -0.0376) = -0.00819
-}
-\]
+$$y_5 = F(0.702) = \frac{1}{1 + e^{-0.702}} = \boxed{0.67}$$
 
 ---
 
-## 4️⃣ Weight Updates
+![Computed Values y3, y4, y5](https://media.geeksforgeeks.org/wp-content/uploads/20250701164956768059/Backpropagation-in-Neural-Network-5.webp)
 
-### Hidden → Output
-
-\[
-\boxed{
-\Delta w_{2,3} = 1 \cdot (-0.0376) \cdot 0.59 = -0.022184
-}
-\]
-
-\[
-\boxed{
-w_{2,3}^{new} = 0.9 - 0.022184 = 0.877816
-}
-\]
+*Figure 5 — Network with computed values: y₃ = 0.56, y₄ = 0.57, y₅ = 0.67*
 
 ---
 
-### Input → Hidden
+### 4️⃣ Error Calculation
 
-\[
-\boxed{
-\Delta w_{1,1} = 1 \cdot (-0.0027) \cdot 0.35 = -0.000945
-}
-\]
+> **Predicted:** `y₅ = 0.67` &nbsp;|&nbsp; **Target:** `0.5`
 
-\[
-\boxed{
-w_{1,1}^{new} = 0.2 - 0.000945 = 0.199055
-}
-\]
+$$\text{Error}_j = y_{\text{target}} - y_5 = 0.5 - 0.67 = \mathbf{-0.17}$$
+
+> ⚠️ We now use this error value to **backpropagate** through the network.
 
 ---
 
-### Updated Weights
+## ⬅️ Backward Propagation
 
-- \( w_{1,2}^{new} = 0.273225 \)  
-- \( w_{1,3}^{new} = 0.086615 \)  
-- \( w_{2,1}^{new} = 0.269445 \)  
-- \( w_{2,2}^{new} = 0.18534 \)  
+### 1️⃣ Weight Update Formula
 
----
+$$\Delta w_{ij} = \eta \times \delta_j \times O_j$$
 
-![Updated Weights](https://media.geeksforgeeks.org/wp-content/uploads/20250918132203487723/backpropagation_in_neural_network_11.webp)
-
----
-
-# 🔄 Iteration Continues
-
-\[
-\boxed{
-y_3 = 0.57,\quad y_4 = 0.56,\quad y_5 = 0.61
-}
-\]
+| Symbol | Meaning |
+|---|---|
+| $\delta_j$ | Error term for each unit |
+| $\eta$ | Learning rate |
+| $O_j$ | Output of the neuron |
 
 ---
 
-## 📉 New Error
+### 2️⃣ Output Unit Error Term — `δ₅` at O3
 
-\[
-\boxed{
-Error = 0.5 - 0.61 = -0.11
-}
-\]
+$$\delta_5 = y_5 (1 - y_5)(y_{\text{target}} - y_5)$$
+
+$$= 0.67 \times (1 - 0.67) \times (-0.17) = \boxed{-0.0376}$$
 
 ---
 
-# 🧠 Final Insight
+### 3️⃣ Hidden Unit Error Terms
 
-Backpropagation = **iterative error correction loop**
+#### At `h1` — computing `δ₃`
 
-1. Forward pass  
-2. Compute error  
-3. Backward pass  
-4. Update weights  
+$$\delta_3 = y_3(1 - y_3)(w_{1,3} \times \delta_5)$$
 
-Repeat until convergence.
+$$= 0.56 \times (1 - 0.56) \times (0.3 \times -0.0376) = \boxed{-0.0027}$$
 
----
+#### At `h2` — computing `δ₄`
 
-# ⚠️ Reality Check
+$$\delta_4 = y_4(1 - y_4)(w_{2,3} \times \delta_5)$$
 
-If you can’t:
-- Derive gradients  
-- Understand chain rule  
-- Explain why sigmoid derivative matters  
-
-Then you're not building AI — you're just executing code.
+$$= 0.59 \times (1 - 0.59) \times (0.9 \times -0.0376) = \boxed{-0.00819}$$
 
 ---
 
-# 🚀 Core Takeaway
+### 4️⃣ Weight Updates
 
-Forward Propagation = **Prediction**  
-Backpropagation = **Learning**
+#### 🔄 Hidden → Output Layer Weights
 
-Together = **Real Intelligence**
+$$\Delta w_{2,3} = 1 \times (-0.0376) \times 0.59 = -0.022184$$
+
+$$w_{2,3}^{\text{(new)}} = -0.022184 + 0.9 = \boxed{0.877816}$$
 
 ---
+
+#### 🔄 Input → Hidden Layer Weights
+
+$$\Delta w_{1,1} = 1 \times (-0.0027) \times 0.35 = -0.000945$$
+
+$$w_{1,1}^{\text{(new)}} = -0.000945 + 0.2 = \boxed{0.199055}$$
+
+---
+
+### 📊 All Updated Weights Summary
+
+| Weight | Old Value | Δ (Change) | New Value |
+|:---:|:---:|:---:|:---:|
+| $w_{1,1}$ | 0.200 | −0.000945 | **0.199055** |
+| $w_{2,1}$ | 0.200 | — | **0.269445** |
+| $w_{1,2}$ | 0.300 | — | **0.273225** |
+| $w_{2,2}$ | 0.300 | — | **0.18534** |
+| $w_{1,3}$ | 0.300 | — | **0.086615** |
+| $w_{2,3}$ | 0.900 | −0.022184 | **0.877816** |
+
+---
+
+![Updated Weights Network](https://media.geeksforgeeks.org/wp-content/uploads/20250918132203487723/backpropagation_in_neural_network_11.webp)
+
+*Figure 6 — Network with updated weights after one backward pass*
+
+---
+
+## 🔁 Next Forward Pass — After Weight Update
+
+With the newly updated weights, running the forward pass again gives:
+
+| Node | Previous Output | New Output |
+|:---:|:---:|:---:|
+| $y_3$ | 0.56 | **0.57** |
+| $y_4$ | 0.59 | **0.56** |
+| $y_5$ | 0.67 | **0.61** |
+
+**New Error:**
+
+$$\text{Error} = y_{\text{target}} - y_5 = 0.5 - 0.61 = \mathbf{-0.11}$$
+
+> 📉 Error reduced from **−0.17 → −0.11** ✅
+> Since `y₅ = 0.61` is still not the target `0.5`, the process **continues iterating**.
+
+---
+
+## 🔄 The Full Training Loop
+
+```
+┌─────────────────────────────────────────────────────────┐
+│               BACKPROPAGATION TRAINING LOOP             │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  EPOCH 1                                                │
+│  ├── Forward Pass  →  y₅ = 0.67  →  Error = −0.17      │
+│  └── Backward Pass →  Update all weights                │
+│                                                         │
+│  EPOCH 2                                                │
+│  ├── Forward Pass  →  y₅ = 0.61  →  Error = −0.11      │
+│  └── Backward Pass →  Update all weights                │
+│                                                         │
+│  EPOCH N                                                │
+│  ├── Forward Pass  →  y₅ ≈ 0.50  →  Error ≈ 0.00  ✅   │
+│  └── CONVERGED — Training Complete!                     │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📐 Key Formulas — Quick Reference Card
+
+$$\boxed{\text{Weighted Sum:} \quad a_j = \sum_i w_{i,j} \cdot x_i}$$
+
+$$\boxed{\text{Sigmoid:} \quad y_j = \frac{1}{1+e^{-a_j}}}$$
+
+$$\boxed{\text{MSE:} \quad \text{Loss} = (y_{\text{target}} - y_{\text{pred}})^2}$$
+
+$$\boxed{\text{Output Error:} \quad \delta_5 = y_5(1-y_5)(y_{\text{target}}-y_5)}$$
+
+$$\boxed{\text{Hidden Error:} \quad \delta_j = y_j(1-y_j)\sum_k w_{jk} \cdot \delta_k}$$
+
+$$\boxed{\text{Weight Update:} \quad w_{ij}^{\text{new}} = w_{ij} + \eta \cdot \delta_j \cdot O_i}$$
+
+---
+
+## 🧩 Concept Summary
+
+```
+BACKPROPAGATION = CHAIN RULE + GRADIENT DESCENT
+
+         ┌──────────────┐      ┌───────────────┐
+INPUT ──►│ FORWARD PASS │─────►│ COMPUTE LOSS  │
+         └──────────────┘      └───────┬───────┘
+                                       │ Error
+                                       ▼
+         ┌──────────────┐      ┌───────────────┐
+WEIGHTS  │ UPDATE W & B │◄─────│ BACKWARD PASS │
+UPDATED  └──────────────┘      └───────────────┘
+                                 (Chain Rule)
+```
+
+> 🎯 **Goal:** Drive the **Loss → 0** by iteratively tuning every weight and bias in the network using the gradient signal flowing backward from the output.
+
+---
+
+*📝 Notes compiled for NIELIT × IIT Ropar AI/ML Training Program — Deep Learning Module*
+*🚀 Part of the AAgni AI Knowledge Base — Built in Patiala, Made in India*
